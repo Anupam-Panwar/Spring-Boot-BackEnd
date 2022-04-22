@@ -13,12 +13,14 @@ public class MovieController
     @Autowired
     private MovieServices movieServices;
 
+    //Adds movies to the database
     @GetMapping("/add")
     public String add() {
-        movieServices.insertMovie();
-        return "Movies Successfully added to the Database";
+        String response = movieServices.insertMovie();
+        return response;
     }
 
+    //Returns rating of movies from the database
     @GetMapping("/rating")
     public List<List<String>> movieRating(){
         return movieServices.movieRating();

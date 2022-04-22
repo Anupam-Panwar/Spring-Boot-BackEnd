@@ -1,9 +1,6 @@
 package com.springboot.rest.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,8 +9,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString
 @Table(name = "users")
-public class Users
+public class User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

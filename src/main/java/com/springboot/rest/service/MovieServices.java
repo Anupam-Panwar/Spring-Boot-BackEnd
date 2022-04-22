@@ -1,10 +1,12 @@
 package com.springboot.rest.service;
 
+import com.springboot.rest.exception.ResourceNotFoundException;
 import com.springboot.rest.model.Movie;
 import com.springboot.rest.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -19,33 +21,56 @@ public class MovieServices {
     @Autowired
     private MovieRepository movieRepository;
 
-    public void insertMovie()
+    //Method to add Movies into the database
+    public String insertMovie()
     {
-        movieRepository.deleteAll();
-        for(int i = 100; i<=110; i++) {
-            String url = "https://api.themoviedb.org/3/movie/"+i+"?api_key=" + apiKey;
-            RestTemplate restTemplate = new RestTemplate();
+        try {
+            movieRepository.deleteAll();
+            int count = 0;
+            for (int i = 100; i <= 110; i++) {
+                String url = "https://api.themoviedb.org/3/movie/" + i + "?api_key=" + apiKey;
+                RestTemplate restTemplate = new RestTemplate();
 
-            Movie movie_summary = restTemplate.getForObject(url, Movie.class);
-            movieRepository.save(movie_summary);
+                Movie movieSummary = restTemplate.getForObject(url, Movie.class);
+                movieRepository.save(movieSummary);
+                count++;
+            }
+            if(count == 11)
+                return "Successfully Added movies in the database";
+            else
+                return "Successfully Added few movies in the database";
+
+        }
+        catch(Exception e) {
+            return "Error while loading the movies in the database";
         }
     }
 
+    //Method to return ratings of the movie
     public List<List<String>> movieRating()
     {
-        List<Movie> tempResult= movieRepository.findAll();
-        List<List<String>> result = new ArrayList<>();
-        for(Movie t : tempResult) {
-            List<String> temp = new ArrayList<>();
-            temp.add(t.getTitle());
-            long avgRating = t.getAvgRating();
-            if(avgRating == 0)
-                temp.add("NA");
-            else
-                temp.add(Long.toString(avgRating));
+        try {
+            List<Movie> tempResult = movieRepository.findAll();
+            List<List<String>> result = new ArrayList<>();
+            for (Movie t : tempResult) {
+                List<String> temp = new ArrayList<>();
+                temp.add(t.getTitle());
+                long avgRating = t.getAvgRating();
+                if (avgRating == 0)
+                    temp.add("NA");
+                else
+                    temp.add(Long.toString(avgRating));
 
-            result.add(temp);
+                result.add(temp);
+            }
+            return result;
         }
-        return result;
+        catch (Exception e) {
+            List<List<String>> response = new ArrayList<>();
+            List<String> temp = new ArrayList<>();
+            temp.add("Error while fetching rating");
+            response.add(temp);
+            return response;
+        }
     }
 }

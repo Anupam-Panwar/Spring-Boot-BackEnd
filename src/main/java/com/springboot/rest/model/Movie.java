@@ -32,4 +32,7 @@ public class Movie
     @Column(name = "avg_rating")
     private long avgRating;
 
+    public Movie(String title){
+        this.title = title;
+    }
 }

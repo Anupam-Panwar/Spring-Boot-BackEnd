@@ -1,11 +1,9 @@
 package com.springboot.rest.repository;
 
-import com.springboot.rest.model.Users;
+import com.springboot.rest.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-public interface UsersRepository extends JpaRepository<Users, Long> {
+public interface UsersRepository extends JpaRepository<User, Long> {
     //all CRUD Database Methods
-    Users findByEmailId(String emailId);
+    User findByEmailId(String emailId);
 }
