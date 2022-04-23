@@ -37,7 +37,6 @@ public class UserServices {
     public String insertUsers(User user) {
         try {
             authenticate(user.getEmailId(), user.getPassword());
-            System.out.println("over here");
             usersRepository.save(user);
             return "Successfully Added User";
         }
@@ -78,18 +77,6 @@ public class UserServices {
                 throw new Exception("Invalid Password for email id : " + user.getEmailId());
     }
 
-    //Method to fetch movies from the database
-    public List<Movie> getMovieList() {
-        try {
-            return movieRepository.findAll();
-        }
-        catch (Exception e) {
-            List<Movie> result = new ArrayList<>();
-            Movie movie = new Movie("Error While fetching movies from the Database");
-            result.add(movie);
-            return result;
-        }
-    }
 
     //Method to add custom rating of usres for particular movie in database
     public String userMovieRating(UserMovieRating userMovieRating, String jwtToken) {

@@ -7,6 +7,7 @@ import com.springboot.rest.model.UserMovieRating;
 import com.springboot.rest.model.User;
 import com.springboot.rest.service.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class UsersController
     private JwtTokenUtil jwtTokenUtil;
 
     //Adds User into the Database
-    @PostMapping("/add")
+    @PostMapping("/registration")
     public String add(@RequestBody User user) {
         String response = userServices.insertUsers(user);
         return response;
@@ -37,23 +38,15 @@ public class UsersController
     //Logins User into the system
     @PostMapping("/login")
     public ResponseEntity<?>  login(@RequestBody User user) throws Exception {
-
-        User result = userServices.loginUsers(user);
-        final String token = jwtTokenUtil.generateToken(result);
-        return ResponseEntity.ok(new JwtResponse(token));
-
-    }
-
-    //Return list of movies to the valid user
-    @PostMapping("/list")
-    public List<Movie> getMovieList() {
-        List<Movie> response = new ArrayList<>();
-        response = userServices.getMovieList();
-        if (response.size() == 0) {
-            Movie movie = new Movie("No Movie present in the Database");
-            response.add(movie);
+        try {
+            User result = userServices.loginUsers(user);
+            final String token = jwtTokenUtil.generateToken(result);
+            return ResponseEntity.ok(new JwtResponse(token));
         }
-        return response;
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid Credentials");
+        }
+
     }
 
     //Adds users rating of the movie into the database

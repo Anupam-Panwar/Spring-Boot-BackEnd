@@ -67,10 +67,12 @@ public class MovieServices {
         }
         catch (Exception e) {
             List<List<String>> response = new ArrayList<>();
-            List<String> temp = new ArrayList<>();
-            temp.add("Error while fetching rating");
-            response.add(temp);
             return response;
         }
+    }
+
+    //Method to fetch movies from the database
+    public List<Movie> getMovieList() throws Exception{
+        return movieRepository.findAll();
     }
 }

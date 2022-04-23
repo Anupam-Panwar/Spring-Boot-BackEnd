@@ -7,9 +7,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.rest.model.User;
 import com.springboot.rest.service.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -45,6 +48,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 				System.out.println("Unable to get JWT Token");
 			} catch (ExpiredJwtException e) {
 				System.out.println("JWT Token has expired");
+			} catch (Exception e) {
+				System.out.println("Invlaid Token");
+				response.setStatus(HttpStatus.UNAUTHORIZED.value());
+				response.getOutputStream().print(new ObjectMapper().writeValueAsString("InValid Token"));
+				response.flushBuffer();
 			}
 		} else {
 			logger.warn("JWT Token does not begin with Bearer String");

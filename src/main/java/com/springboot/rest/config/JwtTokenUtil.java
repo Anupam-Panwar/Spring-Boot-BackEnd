@@ -24,7 +24,7 @@ public class JwtTokenUtil implements Serializable {
 	@Value("${jwt.secret}")
 	private String secret;
 
-	public String getEmailIdFromToken(String token) {
+	public String getEmailIdFromToken(String token) throws Exception {
 		return getClaimFromToken(token, Claims::getSubject);
 	}
 
@@ -70,7 +70,12 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	public Boolean validateToken(String token, User userDetails) {
-		final String emailId = getEmailIdFromToken(token);
-		return (emailId.equals(userDetails.getEmailId()) && !isTokenExpired(token));
+		try {
+			final String emailId = getEmailIdFromToken(token);
+			return (emailId.equals(userDetails.getEmailId()) && !isTokenExpired(token));
+		}
+		catch (Exception e) {
+			return false;
+		}
 	}
 }
