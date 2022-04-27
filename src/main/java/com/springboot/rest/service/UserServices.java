@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -84,11 +85,19 @@ public class UserServices {
             String emailId = jwtTokenUtil.getEmailIdFromToken(jwtToken);
             User user = usersRepository.findByEmailId(emailId);
             int userId = (int)user.getId();
-            userMovieRating.setUserId(userId);
-            long movieId = (int)userMovieRating.getMovieId();
+            long rating = userMovieRating.getRating();
+            long movieId = userMovieRating.getMovieId();
+            
             Optional<Movie> movie = movieRepository.findById(movieId);
-            if(movie.isPresent() == false)
+            if(!movie.isPresent())
                 return "Invalid Movie Id";
+
+            Movie presentMovie = movie.get();
+            long newRating = (rating+presentMovie.getAvgRating())/2;
+
+            presentMovie.setAvgRating(newRating);
+            movieRepository.saveAndFlush(presentMovie);
+            userMovieRating.setUserId(userId);
             userMovieRatingRepository.save(userMovieRating);
             return "Rating added successfully";
         }
