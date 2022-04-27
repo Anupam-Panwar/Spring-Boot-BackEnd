@@ -10,7 +10,7 @@
 
 <details>
 <summary style="font-size: 1.2em">POST : User Registration</summary>
- <br><strong> http://localhost:8081/user/add </strong><br><br>
+ <br><strong> http://localhost:8081/user/registration </strong><br><br>
  Allows user to register into your system
 </details>
 
@@ -22,7 +22,7 @@
 
 <details>
 <summary style="font-size: 1.2em">POST : Movie List</summary>
-<br><strong> http://localhost:8081/user/list</strong><br><br>
+<br><strong> http://localhost:8081/movie/list</strong><br><br>
  Using the access token user can retrieve movies list
 </details>
 
@@ -35,7 +35,7 @@
 
 <details>
 <summary style="font-size: 1.2em">GET : Movie Rating</summary>
-<br><strong> http://localhost:8081/movie/rating</strong><br><br>
+<br><strong> http://localhost:8081/movie/average-rating</strong><br><br>
 API to look at the average rating of each movie. if not rating existing for any movie. Provides NA
 </details>
 
